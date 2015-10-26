@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GreetingsHalloween" targetNamespace="urn:com.example.switchyard:switchyard-camel-helloworld:1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="urn:com.example.switchyard:switchyard-camel-helloworld:1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:com.example.switchyard:switchyard-camel-helloworld:1.0" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:com.example.switchyard:switchyard-camel-helloworld:1.0">
+  <xsd:element name="string" nillable="true" type="xsd:string"/>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="happyHallowing">
+    <wsdl:part name="arg0" element="tns:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="happyHallowingResponse">
+    <wsdl:part name="return" element="tns:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GreetingsHalloweenPortType">
+    <wsdl:operation name="happyHallowing">
+      <wsdl:input name="happyHallowing" message="tns:happyHallowing">
+    </wsdl:input>
+      <wsdl:output name="happyHallowingResponse" message="tns:happyHallowingResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GreetingsHalloweenSoapBinding" type="tns:GreetingsHalloweenPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="happyHallowing">
+      <soap:operation soapAction="happyHallowing" style="document"/>
+      <wsdl:input name="happyHallowing">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="happyHallowingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GreetingsHalloween">
+    <wsdl:port name="GreetingsHalloweenPort" binding="tns:GreetingsHalloweenSoapBinding">
+      <soap:address location="http://localhost:8080/switchyard-camel-helloworld/GreetingsHalloween"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

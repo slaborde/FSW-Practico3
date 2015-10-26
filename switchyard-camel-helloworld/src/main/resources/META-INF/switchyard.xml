@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:camel="urn:switchyard-component-camel:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:soap="urn:switchyard-component-soap:config:1.1" xmlns:sy="urn:switchyard-config:switchyard:1.1" name="switchyard-camel-helloworld" targetNamespace="urn:com.example.switchyard:switchyard-camel-helloworld:1.0">
+  <sca:composite name="switchyard-camel-helloworld" targetNamespace="urn:com.example.switchyard:switchyard-camel-helloworld:1.0">
+    <sca:component name="CamelServiceRoute">
+      <camel:implementation.camel>
+        <camel:java class="com.example.switchyard.switchyard_camel_helloworld.CamelServiceRoute"/>
+      </camel:implementation.camel>
+      <sca:service name="GreetingService">
+        <sca:interface.java interface="com.example.switchyard.switchyard_camel_helloworld.GreetingService"/>
+      </sca:service>
+    </sca:component>
+    <sca:service name="GreetingServicePortType" promote="CamelServiceRoute/GreetingService">
+      <sca:interface.wsdl interface="GreetingService.wsdl#wsdl.porttype(GreetingServicePortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:messageComposer unwrapped="true"/>
+        <soap:wsdl>GreetingService.wsdl</soap:wsdl>
+      </soap:binding.soap>
+    </sca:service>
+    <sca:component name="CamelServiceRouteHalloween">
+      <camel:implementation.camel>
+        <camel:java class="com.example.switchyard.switchyard_camel_helloworld.CamelServiceRouteHalloween"/>
+      </camel:implementation.camel>
+      <sca:service name="GreetingsHalloween">
+        <sca:interface.java interface="com.example.switchyard.switchyard_camel_helloworld.GreetingsHalloween"/>
+      </sca:service>
+    </sca:component>
+    <sca:service name="GreetingsHalloweenPortType" promote="CamelServiceRouteHalloween/GreetingsHalloween">
+      <sca:interface.wsdl interface="GreetingsHalloween.wsdl#wsdl.porttype(GreetingsHalloweenPortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:wsdl>GreetingsHalloween.wsdl</soap:wsdl>
+      </soap:binding.soap>
+    </sca:service>
+  </sca:composite>
+</sy:switchyard>
