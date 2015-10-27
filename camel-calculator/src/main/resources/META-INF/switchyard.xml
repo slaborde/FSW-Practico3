@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sy:switchyard xmlns:bean="urn:switchyard-component-bean:config:1.1" xmlns:camel="urn:switchyard-component-camel:config:1.1" xmlns:jms="urn:switchyard-component-camel-jms:config:1.1" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912" xmlns:soap="urn:switchyard-component-soap:config:1.1" xmlns:sy="urn:switchyard-config:switchyard:1.1" name="camel-calculator" targetNamespace="urn:com.example.switchyard:camel-calculator:1.0">
+  <sca:composite name="camel-calculator" targetNamespace="urn:com.example.switchyard:camel-calculator:1.0">
+    <sca:component name="CamelServiceRoute">
+      <camel:implementation.camel>
+        <camel:java class="com.example.switchyard.camel_calculator.CamelServiceRoute"/>
+      </camel:implementation.camel>
+      <sca:service name="CalcularService">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.CalcularService"/>
+      </sca:service>
+      <sca:reference name="SumadorService">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.SumadorService"/>
+      </sca:reference>
+      <sca:reference name="RestadorService">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.RestadorService"/>
+      </sca:reference>
+    </sca:component>
+    <sca:component name="SumadorServiceBean">
+      <bean:implementation.bean class="com.example.switchyard.camel_calculator.SumadorServiceBean"/>
+      <sca:service name="SumadorService">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.SumadorService"/>
+      </sca:service>
+    </sca:component>
+    <sca:component name="RestadorServiceBean">
+      <bean:implementation.bean class="com.example.switchyard.camel_calculator.RestadorServiceBean"/>
+      <sca:service name="RestadorService">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.RestadorService"/>
+      </sca:service>
+    </sca:component>
+    <sca:service name="CalcularServicePortType" promote="CamelServiceRoute/CalcularService">
+      <sca:interface.wsdl interface="CalcularService.wsdl#wsdl.porttype(CalcularServicePortType)"/>
+      <soap:binding.soap name="soap1">
+        <soap:wsdl>CalcularService.wsdl</soap:wsdl>
+      </soap:binding.soap>
+    </sca:service>
+    <sca:component name="CamelServiceColaRoute">
+      <camel:implementation.camel>
+        <camel:java class="com.example.switchyard.camel_calculator.CamelServiceColaRoute"/>
+      </camel:implementation.camel>
+      <sca:service name="RecibirCola">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.RecibirCola"/>
+      </sca:service>
+      <sca:reference name="EnviarCola">
+        <sca:interface.java interface="com.example.switchyard.camel_calculator.EnviarCola"/>
+      </sca:reference>
+    </sca:component>
+    <sca:service name="RecibirCola" promote="CamelServiceColaRoute/RecibirCola">
+      <sca:interface.java interface="com.example.switchyard.camel_calculator.RecibirCola"/>
+      <jms:binding.jms name="jms1">
+        <sy:operationSelector operationName="recibirCola"/>
+        <jms:queue>COLAIN</jms:queue>
+        <jms:connectionFactory>#ConnectionFactory</jms:connectionFactory>
+      </jms:binding.jms>
+    </sca:service>
+    <sca:reference name="EnviarCola" multiplicity="0..1" promote="CamelServiceColaRoute/EnviarCola">
+      <sca:interface.java interface="com.example.switchyard.camel_calculator.EnviarCola"/>
+      <jms:binding.jms name="jms1">
+        <jms:queue>COLAOUT</jms:queue>
+        <jms:connectionFactory>#ConnectionFactory</jms:connectionFactory>
+      </jms:binding.jms>
+    </sca:reference>
+  </sca:composite>
+  <sy:domain>
+    <sy:properties>
+      <sy:property name="org.switchyard.handlers.messageTrace.enabled" value="true"/>
+    </sy:properties>
+  </sy:domain>
+</sy:switchyard>
